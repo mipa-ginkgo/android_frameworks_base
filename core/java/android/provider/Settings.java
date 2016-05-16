@@ -5836,9 +5836,23 @@ public final class Settings {
          * @hide
          */
         public static final String DATA_DISABLED_ICON = "data_disabled_icon";
+	
+	/**
+         * Change quick settings tiles animation style
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_STYLE = "anim_tile_style";
 
         /**
-         * Show app volume rows in volume panel
+         * Change quick settings tiles animation duration
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_DURATION = "anim_tile_duration";
+
+	/**
+	 * Show app volume rows in volume panel
          * @hide
          */
         public static final String SHOW_APP_VOLUME = "show_app_volume";
