@@ -5851,7 +5851,14 @@ public final class Settings {
          */
         public static final String ANIM_TILE_DURATION = "anim_tile_duration";
 
-	/**
+        /**
+         * Change quick settings tiles interpolator
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
+
+        /**
 	 * Show app volume rows in volume panel
          * @hide
          */
