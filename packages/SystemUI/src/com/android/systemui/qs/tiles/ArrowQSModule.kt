@@ -68,6 +68,12 @@ interface ArrowQSModule {
     @StringKey(PowerShareTile.TILE_SPEC)
     fun bindPowerShareTile(powerShareTile: PowerShareTile): QSTileImpl<*>
 
+    /** Inject RefreshRateTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(RefreshRateTile.TILE_SPEC)
+    fun bindRefreshRateTile(refreshRateTile: RefreshRateTile): QSTileImpl<*>
+
     /** Inject SoundTile into tileMap in QSModule */
     @Binds
     @IntoMap
