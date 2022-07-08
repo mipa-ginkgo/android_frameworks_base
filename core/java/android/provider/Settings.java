@@ -5817,7 +5817,13 @@ public final class Settings {
          */
         public static final String RETICKER_STATUS = "reticker_status";
 
-        /**
+	/**
+         * Whether to show Wi-Fi standard icon
+         * @hide
+         */
+        public static final String SHOW_WIFI_STANDARD_ICON = "show_wifi_standard_icon";
+
+	/**
          * reTicker Colored
          * @hide
          */
