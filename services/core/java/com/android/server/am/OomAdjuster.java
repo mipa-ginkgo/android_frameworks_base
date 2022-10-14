@@ -1664,7 +1664,9 @@ public class OomAdjuster {
             if(mIsTopAppRenderThreadBoostEnabled) {
                 if(mCurRenderThreadTid != app.getRenderThreadTid() && app.getRenderThreadTid() > 0) {
                     mCurRenderThreadTid = app.getRenderThreadTid();
-                    mLocalPowerManager.setPowerMode(Mode.GAME_LOADING, true);
+                    if (mLocalPowerManager != null) {
+                      mLocalPowerManager.setPowerMode(Mode.GAME_LOADING, true);
+                    }
                 }
             }
 
