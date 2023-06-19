@@ -179,7 +179,6 @@ java_library_static {
         "kotlin-stdlib",
         "kotlinx_coroutines_android",
         "kotlinx_coroutines",
-        "vendor.aospa.biometrics.face",
     ],
     javac_shard_size: 50,
 }
