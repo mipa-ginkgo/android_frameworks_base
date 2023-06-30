@@ -113,6 +113,7 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.SharedLibraryInfo;
 import android.content.pm.Signature;
 import android.content.pm.SigningDetails;
+import android.content.pm.UserInfo;
 import android.content.pm.VerifierInfo;
 import android.content.pm.dex.DexMetadataHelper;
 import android.content.pm.parsing.result.ParseResult;
@@ -2124,6 +2125,18 @@ final class InstallPackageHelper {
                         } else {
                             ps.setInstalled(false, currentUserId);
                         }
+
+                        UserInfo userInfo =
+                                UserManagerService.getInstance().getUserInfo(currentUserId);
+                        if (userInfo != null && userInfo.isParallel()) {
+                            if (DEBUG_INSTALL) {
+                                Slog.d(TAG, "User " + currentUserId + " is parallel space, skip install");
+                            }
+                            break;
+                        }
+                        ps.setInstalled(true, currentUserId);
+                        ps.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT, userId,
+                                installerPackageName);
                     }
                 }
 
