@@ -31,6 +31,7 @@
         L 0, 0
         Z
         @dp
+        @left
     </string>
 
     <string translatable="false" name="config_mainBuiltInDisplayCutoutRectApproximation">@*android:string/config_mainBuiltInDisplayCutout</string>
