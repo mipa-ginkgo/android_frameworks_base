@@ -5859,6 +5859,12 @@ public final class Settings {
         public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
 
         /**
+         * Colored QS notification icons
+         * @hide
+         */
+        public static final String QS_COLORED_ICONS = "qs_colored_icons";
+
+        /**
 	 * Show app volume rows in volume panel
          * @hide
          */
