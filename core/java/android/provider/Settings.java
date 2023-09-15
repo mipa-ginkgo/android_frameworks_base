@@ -5822,7 +5822,23 @@ public final class Settings {
          * @hide
          */
         public static final String RETICKER_COLORED = "reticker_colored";
-        
+
+        /**
+         * Adaptive playback
+         * Automatically pause media when the volume is muted and
+         * will resume automatically when volume is restored.
+         *   0 = disabled
+         *   1 = enabled
+         * @hide
+         */
+        public static final String ADAPTIVE_PLAYBACK_ENABLED = "adaptive_playback_enabled";
+
+        /**
+         * Adaptive playback's timeout in ms
+         * @hide
+         */
+        public static final String ADAPTIVE_PLAYBACK_TIMEOUT = "adaptive_playback_timeout";
+
         /** Whether to show ambient or lockscreen if AoD is disabled
          * and we do a wake gesture like lift to wake or double tap
          *
