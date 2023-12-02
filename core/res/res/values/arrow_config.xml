@@ -58,6 +58,7 @@
         <item>Build.BRAND</item>
         <item>Build.MANUFACTURER</item>
         <item>Build.SECURITY_PATCH</item>
+        <item>Build.FIRST_API_LEVEL</item>
       -->
     </string-array>
     <!-- Build fingerprint from the stock ROM -->
