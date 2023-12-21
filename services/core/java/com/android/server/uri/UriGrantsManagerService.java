@@ -1329,7 +1329,7 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub implements
         final long origId = Binder.clearCallingIdentity();
         try {
             return checkGrantUriPermissionUnlocked(callingUid, targetPkg, uri, modeFlags,
-                userId);
+                    userId);
         } finally {
             Binder.restoreCallingIdentity(origId);
         }
@@ -1341,9 +1341,9 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub implements
             return true;
         }
         return ActivityManager.checkComponentPermission(
-            android.Manifest.permission.INTERACT_ACROSS_USERS_FULL,
-            uid, /* owningUid = */-1, /* exported = */ true)
-            == PackageManager.PERMISSION_GRANTED;
+                android.Manifest.permission.INTERACT_ACROSS_USERS_FULL,
+                uid, /* owningUid = */-1, /* exported = */ true)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override

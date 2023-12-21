@@ -27,6 +27,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Binder;
 import android.os.Process;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -40,28 +41,22 @@ import java.util.Set;
 public class PropImitationHooks {
 
     private static final String TAG = "PropImitationHooks";
-    private static final boolean DEBUG = false;
-
-    private static final String[] sCertifiedProps =
-            Resources.getSystem().getStringArray(R.array.config_certifiedBuildProperties);
-
-    private static final String sStockFp =
-            Resources.getSystem().getString(R.string.config_stockFingerprint);
-
-    private static final boolean sSpoofPhotos =
-            Resources.getSystem().getBoolean(R.bool.config_spoofGooglePhotos);
+    private static final boolean DEBUG = SystemProperties.getBoolean("debug.pihooks.log", false);
 
     private static final String PACKAGE_ARCORE = "com.google.ar.core";
     private static final String PACKAGE_FINSKY = "com.android.vending";
     private static final String PACKAGE_GMS = "com.google.android.gms";
     private static final String PROCESS_GMS_UNSTABLE = PACKAGE_GMS + ".unstable";
     private static final String PACKAGE_GPHOTOS = "com.google.android.apps.photos";
-    private static final String PACKAGE_SNAPCHAT = "com.snapchat.android";
+    private static final String PACKAGE_NETFLIX = "com.netflix.mediaclient";
+
+    private static final String PROP_SECURITY_PATCH = "persist.sys.pihooks.security_patch";
+    private static final String PROP_FIRST_API_LEVEL = "persist.sys.pihooks.first_api_level";
 
     private static final ComponentName GMS_ADD_ACCOUNT_ACTIVITY = ComponentName.unflattenFromString(
             "com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity");
 
-    private static final Map<String, Object> sPixelXLProps = Map.of(
+    private static final Map<String, String> sPixelXLProps = Map.of(
         "BRAND", "google",
         "MANUFACTURER", "Google",
         "DEVICE", "marlin",
@@ -81,6 +76,10 @@ public class PropImitationHooks {
         "PIXEL_2021_MIDYEAR_EXPERIENCE"
     );
 
+    private static volatile String[] sCertifiedProps;
+    private static volatile String sStockFp, sNetflixModel;
+    private static volatile boolean sSpoofPhotos;
+
     private static volatile String sProcessName;
     private static volatile boolean sIsGms, sIsFinsky, sIsPhotos;
 
@@ -93,6 +92,17 @@ public class PropImitationHooks {
             return;
         }
 
+        final Resources res = context.getResources();
+        if (res == null) {
+            Log.e(TAG, "Null resources");
+            return;
+        }
+
+        sCertifiedProps = res.getStringArray(R.array.config_certifiedBuildProperties);
+        sStockFp = res.getString(R.string.config_stockFingerprint);
+        sNetflixModel = res.getString(R.string.config_netflixSpoofModel);
+        sSpoofPhotos = res.getBoolean(R.bool.config_spoofGooglePhotos);
+
         sProcessName = processName;
         sIsGms = packageName.equals(PACKAGE_GMS) && processName.equals(PROCESS_GMS_UNSTABLE);
         sIsFinsky = packageName.equals(PACKAGE_FINSKY);
@@ -101,34 +111,43 @@ public class PropImitationHooks {
         /* Set certified properties for GMSCore
          * Set stock fingerprint for ARCore
          * Set Pixel XL for Google Photos and Snapchat
+         * Set custom model for Netflix
          */
         if (sIsGms) {
             setCertifiedPropsForGms();
         } else if (!sStockFp.isEmpty() && packageName.equals(PACKAGE_ARCORE)) {
             dlog("Setting stock fingerprint for: " + packageName);
             setPropValue("FINGERPRINT", sStockFp);
-        } else if (sIsPhotos || packageName.equals(PACKAGE_SNAPCHAT)) {
+        } else if (sIsPhotos) {
             dlog("Spoofing Pixel XL for: " + packageName);
             sPixelXLProps.forEach(PropImitationHooks::setPropValue);
+        } else if (!sNetflixModel.isEmpty() && packageName.equals(PACKAGE_NETFLIX)) {
+            dlog("Setting model to " + sNetflixModel + " for Netflix");
+            setPropValue("MODEL", sNetflixModel);
         }
     }
 
-    private static void setPropValue(String key, Object value) {
+    private static void setPropValue(String key, String value) {
         try {
             dlog("Setting prop " + key + " to " + value.toString());
-            Field field = Build.class.getDeclaredField(key);
+            Class clazz = Build.class;
+            if (key.startsWith("VERSION.")) {
+                clazz = Build.VERSION.class;
+                key = key.substring(8);
+            }
+            Field field = clazz.getDeclaredField(key);
             field.setAccessible(true);
-            field.set(null, value);
+            // Cast the value to int if it's an integer field, otherwise string.
+            field.set(null, field.getType().equals(Integer.TYPE) ? Integer.parseInt(value) : value);
             field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to set prop " + key, e);
         }
     }
 
     private static void setCertifiedPropsForGms() {
-        if (sCertifiedProps.length != 4) {
-            Log.e(TAG, "Insufficient array size for certified props: "
-                    + sCertifiedProps.length + ", required 4");
+        if (sCertifiedProps.length == 0) {
+            dlog("Certified props are not set");
             return;
         }
         final boolean was = isGmsAddAccountActivityOnTop();
@@ -145,10 +164,7 @@ public class PropImitationHooks {
         };
         if (!was) {
             dlog("Spoofing build for GMS");
-            setPropValue("DEVICE", sCertifiedProps[0]);
-            setPropValue("PRODUCT", sCertifiedProps[1]);
-            setPropValue("MODEL", sCertifiedProps[2]);
-            setPropValue("FINGERPRINT", sCertifiedProps[3]);
+            setCertifiedProps();
         } else {
             dlog("Skip spoofing build for GMS, because GmsAddAccountActivityOnTop");
         }
@@ -156,6 +172,30 @@ public class PropImitationHooks {
             ActivityTaskManager.getService().registerTaskStackListener(taskStackListener);
         } catch (Exception e) {
             Log.e(TAG, "Failed to register task stack listener!", e);
+        }
+    }
+
+    private static void setCertifiedProps() {
+        for (String entry : sCertifiedProps) {
+            // Each entry must be of the format FIELD:value
+            final String[] fieldAndProp = entry.split(":", 2);
+            if (fieldAndProp.length != 2) {
+                Log.e(TAG, "Invalid entry in certified props: " + entry);
+                continue;
+            }
+            setPropValue(fieldAndProp[0], fieldAndProp[1]);
+        }
+        setSystemProperty(PROP_SECURITY_PATCH, Build.VERSION.SECURITY_PATCH);
+        setSystemProperty(PROP_FIRST_API_LEVEL,
+                Integer.toString(Build.VERSION.DEVICE_INITIAL_SDK_INT));
+    }
+
+    private static void setSystemProperty(String name, String value) {
+        try {
+            SystemProperties.set(name, value);
+            dlog("Set system prop " + name + "=" + value);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to set system prop " + name + "=" + value, e);
         }
     }
 
