@@ -3136,7 +3136,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         return mIsUnlockWithFingerprintPossible.getOrDefault(userId, false);
     }
 
-    public boolean isUnlockWithFacePossible(int userId) {
+    private boolean isUnlockWithFacePossible(int userId) {
         return isFaceAuthEnabledForUser(userId) && !isFaceDisabled(userId);
     }
 
