@@ -75,9 +75,6 @@ import java.io.PrintWriter
 import javax.inject.Inject
 import javax.inject.Named
 
-import com.android.systemui.flags.FeatureFlags
-import com.android.systemui.flags.Flags
-
 /**
  * Controller for QS header.
  *
@@ -105,8 +102,7 @@ constructor(
     private val combinedShadeHeadersConstraintManager: CombinedShadeHeadersConstraintManager,
     private val demoModeController: DemoModeController,
     private val qsBatteryModeController: QsBatteryModeController,
-    private val activityStarter: ActivityStarter,
-    private val featureFlags: FeatureFlags,
+    private val activityStarter: ActivityStarter
 ) : ViewController<View>(header), Dumpable, View.OnClickListener, View.OnLongClickListener {
 
     companion object {
@@ -295,13 +291,8 @@ constructor(
             Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
         )
 
-        if (featureFlags.isEnabled(Flags.COMBINED_STATUS_BAR_SIGNAL_ICONS)) {
-            carrierIconSlots =
-                listOf(header.context.getString(com.android.internal.R.string.status_bar_no_calling))
-        } else {
-            carrierIconSlots =
-                listOf(header.context.getString(com.android.internal.R.string.status_bar_mobile))
-        }
+        carrierIconSlots =
+            listOf(header.context.getString(com.android.internal.R.string.status_bar_mobile))
         qsCarrierGroupController =
             qsCarrierGroupControllerBuilder.setQSCarrierGroup(qsCarrierGroup).build()
 

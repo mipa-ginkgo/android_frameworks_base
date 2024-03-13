@@ -99,35 +99,25 @@ public class QSCarrier extends LinearLayout {
             mMobileRoaming.setImageTintList(colorStateList);
             mMobileSignal.setImageTintList(colorStateList);
 
-            if (state.providerModelBehavior) {
-                if (!mMobileSignalInitialized) {
-                    mMobileSignalInitialized = true;
-                    mMobileSignal.setImageDrawable(
-                            mContext.getDrawable(R.drawable.ic_qs_no_calling_sms));
-                }
-                mMobileSignal.setImageDrawable(mContext.getDrawable(state.mobileSignalIconId));
-                mMobileSignal.setContentDescription(state.contentDescription);
-            } else {
-                if (!mMobileSignalInitialized) {
-                    mMobileSignalInitialized = true;
-                    mMobileSignal.setImageDrawable(new SignalDrawable(mContext));
-                }
-                mMobileSignal.setImageLevel(state.mobileSignalIconId);
-                StringBuilder contentDescription = new StringBuilder();
-                if (state.contentDescription != null) {
-                    contentDescription.append(state.contentDescription).append(", ");
-                }
-                if (state.roaming) {
-                    contentDescription
-                            .append(mContext.getString(R.string.data_connection_roaming))
-                            .append(", ");
-                }
-                // TODO: show mobile data off/no internet text for 5 seconds before carrier text
-                if (hasValidTypeContentDescription(state.typeContentDescription)) {
-                    contentDescription.append(state.typeContentDescription);
-                }
-                mMobileSignal.setContentDescription(contentDescription);
+            if (!mMobileSignalInitialized) {
+                mMobileSignalInitialized = true;
+                mMobileSignal.setImageDrawable(new SignalDrawable(mContext));
             }
+            mMobileSignal.setImageLevel(state.mobileSignalIconId);
+            StringBuilder contentDescription = new StringBuilder();
+            if (state.contentDescription != null) {
+                contentDescription.append(state.contentDescription).append(", ");
+            }
+            if (state.roaming) {
+                contentDescription
+                        .append(mContext.getString(R.string.data_connection_roaming))
+                        .append(", ");
+            }
+            // TODO: show mobile data off/no internet text for 5 seconds before carrier text
+            if (hasValidTypeContentDescription(state.typeContentDescription)) {
+                contentDescription.append(state.typeContentDescription);
+            }
+            mMobileSignal.setContentDescription(contentDescription);
         }
         return true;
     }
