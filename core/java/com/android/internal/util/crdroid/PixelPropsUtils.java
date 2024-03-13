@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.util.custom;
+package com.android.internal.util.arrow;
 
 import android.app.Application;
 import android.os.Build;
