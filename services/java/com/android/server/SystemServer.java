@@ -2544,8 +2544,6 @@ public final class SystemServer implements Dumpable {
             t.traceBegin("StartMediaMetricsManager");
             mSystemServiceManager.startService(MediaMetricsManagerService.class);
             t.traceEnd();
-<<<<<<< HEAD
-=======
 
             // CustomDeviceConfigService
             t.traceBegin("StartCustomDeviceConfigService");
@@ -2555,17 +2553,6 @@ public final class SystemServer implements Dumpable {
             t.traceBegin("StartLinearmotorVibratorService");
             mSystemServiceManager.startService(LinearmotorVibratorService.class);
             t.traceEnd();
-
-            // LineageHardware
-            if (!mOnlyCore){
-                t.traceBegin("StartLineageHardwareService");
-                mSystemServiceManager.startService(LineageHardwareService.class);
-                t.traceEnd();
-                t.traceBegin("StartLiveDisplayService");
-                mSystemServiceManager.startService(LiveDisplayService.class);
-                t.traceEnd();
-            }
->>>>>>> 7e27b015205d (Implement DeviceConfigUtils and service)
         }
 
         t.traceBegin("StartMediaProjectionManager");
