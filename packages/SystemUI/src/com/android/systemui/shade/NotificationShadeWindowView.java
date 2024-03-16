@@ -125,13 +125,10 @@ public class NotificationShadeWindowView extends FrameLayout {
             View child = getChildAt(i);
             if (child.getLayoutParams() instanceof LayoutParams) {
                 LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                boolean marginChanged = lp.rightMargin != mRightInset || lp.leftMargin != mLeftInset;
-                if (marginChanged) {
-                    lp.leftMargin = lp.ignoreLeftInset ? 0 : mLeftInset;
-                    lp.rightMargin = lp.ignoreRightInset ? 0 : mRightInset;
-                    if (lp.ignoreLeftInset && lp.rightMargin == 0) {
-                        lp.rightMargin = mRightInset;
-                    }
+                if (!lp.ignoreRightInset
+                        && (lp.rightMargin != mRightInset || lp.leftMargin != mLeftInset)) {
+                    lp.rightMargin = mRightInset;
+                    lp.leftMargin = mLeftInset;
                     child.requestLayout();
                 }
             }
@@ -246,7 +243,6 @@ public class NotificationShadeWindowView extends FrameLayout {
     private static class LayoutParams extends FrameLayout.LayoutParams {
 
         public boolean ignoreRightInset;
-        public boolean ignoreLeftInset;
 
         LayoutParams(int width, int height) {
             super(width, height);
@@ -258,8 +254,6 @@ public class NotificationShadeWindowView extends FrameLayout {
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.StatusBarWindowView_Layout);
             ignoreRightInset = a.getBoolean(
                     R.styleable.StatusBarWindowView_Layout_ignoreRightInset, false);
-            ignoreLeftInset = a.getBoolean(
-                    R.styleable.StatusBarWindowView_Layout_ignoreLeftInset, false);
             a.recycle();
         }
     }
