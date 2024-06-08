@@ -808,8 +808,7 @@ public class ApplicationPackageManager extends PackageManager {
 
     @Override
     public boolean hasSystemFeature(String name, int version) {
-        return PropImitationHooks.hasSystemFeature(name,
-                mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version)));
+        return mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version));
     }
 
     /** @hide */
