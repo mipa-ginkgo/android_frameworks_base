@@ -48,29 +48,6 @@
     <string-array name="config_vendorPlatformSignatures">
     </string-array>
 
-    <!-- Build properties from a GMS certified device against current platform SPL level -->
-    <string-array name="config_certifiedBuildProperties" translatable="false">
-      <!-- 
-        <item>Build.DEVICE</item>
-        <item>Build.PRODUCT</item>
-        <item>Build.MODEL</item>
-        <item>Build.FINGERPRINT</item>
-        <item>Build.BRAND</item>
-        <item>Build.MANUFACTURER</item>
-        <item>Build.SECURITY_PATCH</item>
-        <item>Build.FIRST_API_LEVEL</item>
-      -->
-    </string-array>
-    <!-- Build fingerprint from the stock ROM -->
-
-    <string name="config_stockFingerprint" translatable="false"></string>
-
-    <!-- Device model (Build.MODEL) to spoof for netflix, if not empty -->
-    <string name="config_netflixSpoofModel" translatable="false"></string>
-
-    <!-- Whether to spoof device as Pixel XL for Google Photos -->
-    <bool name="config_spoofGooglePhotos">true</bool>
-
     <!-- Path to fast charging status file to detect whether an oem fast charger is active -->
     <string name="config_oemFastChargerStatusPath" translatable="false"></string>
 
