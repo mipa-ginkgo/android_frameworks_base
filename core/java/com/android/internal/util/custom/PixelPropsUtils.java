@@ -181,14 +181,14 @@ public class PixelPropsUtils {
 
                 dlog("Spoofing build for GMS");
                 // Alter build parameters to avoid hardware attestation enforcement
-                setBuildField("BRAND", "motorola");
-                setBuildField("MANUFACTURER", "motorola");
-                setBuildField("DEVICE", "griffin");
-                setBuildField("ID", "MCC24.246-37");
-                setBuildField("FINGERPRINT", "motorola/griffin_retcn/griffin:6.0.1/MCC24.246-37/42:user/release-keys");
-                setBuildField("MODEL", "XT1650-05");
-                setBuildField("PRODUCT", "griffin_retcn");
-                setVersionFieldString("SECURITY_PATCH", "2016-07-01");
+                setBuildField("BRAND", "google");
+                setBuildField("MANUFACTURER", "google");
+                setBuildField("DEVICE", "husky");
+                setBuildField("ID", "AP31.240517.022");
+                setBuildField("FINGERPRINT", "google/husky_beta/husky:15/AP31.240517.022/11948202:user/release-keys");
+                setBuildField("MODEL", "Pixel 8 Pro");
+                setBuildField("PRODUCT", "husky_beta");
+                setVersionFieldString("SECURITY_PATCH", "2024-06-05");
                 return true;
             }
         }
