@@ -183,12 +183,12 @@ public class PixelPropsUtils {
                 // Alter build parameters to avoid hardware attestation enforcement
                 setBuildField("BRAND", "google");
                 setBuildField("MANUFACTURER", "google");
-                setBuildField("DEVICE", "husky");
-                setBuildField("ID", "AP31.240517.022");
-                setBuildField("FINGERPRINT", "google/husky_beta/husky:15/AP31.240517.022/11948202:user/release-keys");
-                setBuildField("MODEL", "Pixel 8 Pro");
-                setBuildField("PRODUCT", "husky_beta");
-                setVersionFieldString("SECURITY_PATCH", "2024-06-05");
+                setBuildField("DEVICE", "sailfish");
+                setBuildField("ID", "OPM1.171019.011");
+                setBuildField("FINGERPRINT", "google/sailfish/sailfish:8.1.0/OPM1.171019.011/4448085:user/release-keys");
+                setBuildField("MODEL", "Pixel");
+                setBuildField("PRODUCT", "sailfish");
+                setVersionFieldString("SECURITY_PATCH", "2017-12-05");
                 return true;
             }
         }
